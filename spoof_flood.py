@@ -15,7 +15,7 @@ PACKET_SIZE = 512              # Размер полезной нагрузки
 DURATION = 60                  # Секунд атаки
 # =====================
 
-def checksum(data):
+def calc_checksum(data):
     """Вычисление IP-контрольной суммы (16 бит)"""
     if len(data) % 2 != 0:
         data += b'\x00'
@@ -43,7 +43,7 @@ def create_ip_header(src_ip, dst_ip, proto, payload_len):
         ttl, protocol, checksum, src, dst
     )
     # Вычисляем контрольную сумму
-    ip_checksum = checksum(ip_header)
+    ip_checksum = calc_checksum(ip_header)   # <-- ИСПРАВЛЕНО
     # Переупаковываем с правильной контрольной суммой
     ip_header = struct.pack('!BBHHHBBH4s4s',
         ip_ver_ihl, tos, total_len, ip_id, flags_frag,
